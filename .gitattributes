@@ -4,6 +4,6 @@
 # Don’t let rendered HTML dominate language stats
 # (treat them as vendored/generated assets)
 reports/** linguist-vendored
-docs/**    linguist-vendored
+docs/**/*.html linguist-vendored
 archive/**/*.html linguist-vendored
 *.html linguist-vendored
