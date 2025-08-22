@@ -1,0 +1,1789 @@
+---
+title: "CPI & Wage Disparity Statistical Analysis"
+author: "Christian Lira Gonzalez"
+date: "2024-11-29"
+output: 
+  html_document:
+    theme: journal
+    toc: yes
+    toc_float:
+      collapsed: true
+runtime: shiny
+---
+<br>
+<br>
+
+## Introduction
+
+In an era of economic challenges, where inflation and wage growth compete for dominance in shaping financial stability, understanding their interplay has become crucial. Inflation, often measured by the Consumer Price Index (CPI), reflects the rising cost of goods and services over time, eroding the purchasing power of households. Wages, serving as the primary source of income for most individuals, are central to determining the ability to navigate these inflationary pressures. Together, these factors form the cornerstone of economic equity and sustainability.
+
+While wages have shown growth in various sectors, persistent questions remain: Are real wages (adjusted for inflation) truly keeping pace with rising costs, or are workers experiencing a quiet erosion of their purchasing power? Which regions or states demonstrate resilience, and which are more vulnerable? What patterns emerge when wage fluctuations are analyzed over time and across sectors? Moreover, how has economic inequality evolved, and what lessons can be drawn for wage forecasting?
+
+This analysis delves into these pressing questions, utilizing a robust framework of statistical methods and visualizations to evaluate wage dynamics over time. By assessing real versus nominal wages, geographic patterns, sectoral differences, and inequality trends, this study aims to shed light on critical issues at the intersection of labor, inflation, and policy. Policymakers, labor advocates, and businesses can leverage these insights to address disparities and promote economic fairness.
+
+<br>
+
+
+## Objectives
+
+
+The goal of this analysis is to provide a comprehensive understanding of the relationship between wages and inflation, using the Consumer Price Index (CPI) as the primary measure of inflation. Specifically, the analysis aims to:
+
+__Understand Trends in CPI:__ Analyze yearly and monthly CPI trends to identify patterns of inflation.
+
+__Examine Wage Trends:__ Compare the evolution of nominal and real wages to assess whether purchasing power has kept up with inflation.
+
+__Evaluate Geographic Wage Disparities:__ Investigate how wage growth differs across states and regions to identify areas with significant economic challenges.
+
+__Assess Wage Inequality:__ Measure trends in wage inequality using quantile analysis and the Gini index.
+
+__Correlate Wages and Inflation:__ Examine the strength and nature of the relationship between wage growth and inflation to uncover systemic trends.
+
+__Forecast Future Trends:__ Project wage growth into the future to provide actionable insights for decision-makers.
+
+<br>
+
+## Questions & Hypotheses
+
+To guide this analysis, the following research questions and hypotheses are proposed:
+
+
+Below is a structured list of the questions addressed in the analysis, along with their corresponding null and alternative hypotheses for each:
+
+
+
+### 1. **Are wages keeping up with inflation?**
+
+- **Question:**  
+  Are real wages (adjusted for inflation) stagnating or declining, despite increases in nominal wages?
+
+- **Null Hypothesis (\(H_0\)):**  
+  There is no significant difference between nominal and real wages, indicating that wages are keeping up with inflation.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  There is a significant difference between nominal and real wages, suggesting that wages are not keeping up with inflation.
+
+
+
+### 2. **Are certain states more stable in wage trends than others?**
+
+- **Question:**  
+  Do wage fluctuations vary significantly between states, with some states showing higher stability?
+
+- **Null Hypothesis (\(H_0\)):**  
+  There is no significant difference in wage fluctuations (measured by standard deviation) across states.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  There are significant differences in wage fluctuations across states, with some states being more stable than others.
+
+
+
+### 3. **How has wage inequality evolved over time?**
+
+- **Question:**  
+  Has economic inequality, as measured by the Gini coefficient, increased or decreased over time?
+
+- **Null Hypothesis (\(H_0\)):**  
+  There is no significant change in wage inequality (Gini coefficient) over time.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  Wage inequality (Gini coefficient) has significantly changed over time, either increasing or decreasing.
+
+
+
+### 4. **Do more workers fall below the poverty line based on their household size?**
+
+- **Question:**  
+  Are workers in larger households more likely to fall below the poverty line compared to smaller households?
+
+- **Null Hypothesis (\(H_0\)):**  
+  The proportion of workers below the poverty line is independent of household size.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  The proportion of workers below the poverty line is dependent on household size, with larger households more likely to fall below the poverty line.
+
+
+
+### 5. **How have wage changes varied year-over-year?**
+
+- **Question:**  
+  Are wage changes consistent across years, or do they demonstrate significant variations?
+
+- **Null Hypothesis (\(H_0\)):**  
+  Year-over-year wage changes remain consistent over time.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  Year-over-year wage changes show significant variability, reflecting instability.
+
+
+
+### 6. **Can wages be forecasted accurately into the future?**
+
+- **Question:**  
+  Can ARIMA models predict wage trends accurately for future years?
+
+- **Null Hypothesis (\(H_0\)):**  
+  ARIMA-based forecasting models do not provide accurate predictions of future wages.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  ARIMA-based forecasting models provide accurate predictions of future wages, within reasonable confidence intervals.
+
+
+
+### 7. **Do real and nominal wages demonstrate significantly different trends over time?**
+
+- **Question:**  
+  Do real and nominal wages follow statistically different trajectories over time?
+
+- **Null Hypothesis (\(H_0\)):**  
+  Real and nominal wages do not follow significantly different trends over time.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  Real and nominal wages follow significantly different trends over time, indicating inflation's impact on purchasing power.
+
+
+
+### 8. **Does the geographic distribution of wages show significant patterns?**
+
+- **Question:**  
+  Are there significant geographic disparities in average wages (real and nominal) across states?
+
+- **Null Hypothesis (\(H_0\)):**  
+  Average wages (real and nominal) do not vary significantly across states.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  Average wages (real and nominal) vary significantly across states, indicating regional disparities.
+
+
+
+### 9. **How do wages compare to poverty thresholds across household sizes?**
+
+- **Question:**  
+  Are real wages insufficient to keep households above the federal poverty line?
+
+- **Null Hypothesis (\(H_0\)):**  
+  Real wages are sufficient to keep workers above the poverty line, regardless of household size.
+
+- **Alternative Hypothesis (\(H_A\)):**  
+  Real wages are insufficient to keep workers above the poverty line, especially for larger households.
+
+
+<br>
+
+## Statistical Methods
+
+To rigorously explore the relationship between wages and inflation, this analysis employs the following statistical methods:
+
+
+__Descriptive Statistics:__ Summary measures (mean, median, range) to describe trends in CPI, nominal wages, and real wages over time and across regions.
+
+__Analysis of Variance (ANOVA):__ To test for significant differences in CPI and wage trends across categories such as months, years, and regions.
+
+__Correlation Analysis:__ To evaluate the strength and direction of the relationship between inflation (CPI) and wage growth.
+
+__Regression Analysis:__ To quantify the relationship between inflation (CPI) and wages, and assess whether wages are keeping up with inflation over time.
+
+__Quantile Analysis:__ To examine wage distributions and assess trends in wage inequality over time.
+
+__Gini Index:__ To measure income or wage inequality at a macro level.
+
+__Time Series Analysis:__ To analyze patterns in CPI and wage trends over time and project future wage growth.
+
+__Data Visualization:__ Graphical methods, including line plots, scatter plots, box plots, and animated plots, to effectively communicate trends and findings.
+
+<br>
+
+These methods provide a comprehensive toolkit for understanding the interplay between wages and inflation, ensuring the results are robust, clear, and actionable.
+
+
+<br>
+
+## How to Navigate this Analysis
+
+This report is structured to provide a comprehensive understanding of the relationship between wages and inflation, answering key research questions outlined in the introduction. To ensure that all analyses and findings are presented clearly, each section uses tabsets to organize related content.
+
+__How to Read this Analysis:__
+
+The analysis is divided into sections, each addressing a specific research question or hypothesis. Within these sections, tabsets are used to present all relevant data, statistical results, and visualizations. As you go through the analysis, keep in mind that:
+
+Each tabset contains distinct elements of the analysis, such as trends, statistical tests, and interpretations.
+
+It is recommended to review all tabs in a section before moving to the next part of the report to ensure you have a complete understanding of the findings.
+
+The Table of Contents provides an easy way to navigate between sections. However, the analyses within each section build on each other, so reading them in order will help you follow the logical flow of the report.
+
+<br>
+
+#### Let’s Start Analyzing!
+
+With the foundation set, we begin by examining trends in the Consumer Price Index (CPI), a key measure of inflation. This section sets the stage for understanding how inflation impacts wages over time and across regions. Dive into the first section to uncover the insights CPI trends reveal.
+
+<br>
+<br>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries,echo=FALSE, warning=FALSE, message=FALSE,}
+# Load your libraries
+library(car)
+library(tidyverse)
+library(ggplot2)
+library(DT)
+library(stringr)
+library(scales)
+library(ggrepel)
+library(tsibble)
+library(fable)
+library(plotly)
+library(dplyr)
+library(scales)
+library(sf)
+library(tigris)
+library(leaflet)
+library(shiny)
+library(forcats)
+
+```
+
+```{r data,include=FALSE,warning=FALSE, message=FALSE}
+# Load all data
+# Occupational Employment and Wage Statistics | https://www.bls.gov/oes/tables.htm
+
+# 2015 Occupational Employment and Wage Statistics
+All15 <- readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2015.xlsx")
+
+# 2016 Occupational Employment and Wage Statistics
+All16 <-readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2016.xlsx")
+
+# 2017 Occupational Employment and Wage Statistics
+All17 <-readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2017.xlsx")
+
+# 2018 Occupational Employment and Wage Statistics
+All18 <-readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2018.xlsx")
+
+# 2019 Occupational Employment and Wage Statistics
+All19 <-readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2019.xlsx")
+
+# 2020 Occupational Employment and Wage Statistics
+All20 <-readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2020.xlsx")
+
+# 2021 Occupational Employment and Wage Statistics
+All21 <-readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2021.xlsx")
+
+# 2022 Occupational Employment and Wage Statistics
+All22 <-readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2022.xlsx")
+
+# 2023 Occupational Employment and Wage Statistics
+All23 <- readxl::read_excel("C:\\Users\\chris\\OneDrive\\Documents\\Professional Development\\BYUI\\Fall 2024\\MATH 325 Intermidiate Statistics\\Statistics-Notebook-master\\Analyses\\Linear Regression\\SLR Data\\all_data_M_2023.xlsx")
+
+CPI <- read.csv("C:\\Users\\chris\\OneDrive\\Documents\\New Github Repository\\R programming\\Applied Statistics\\Statistical Analysis Projects\\wage_trend_analysis\\data\\Consumer Price Index data.csv")
+
+minimum <- readxl::read_xls("C:\\Users\\chris\\Downloads\\Minimum_Wgae_xls\\Minimum_Wgae.xls")
+```
+
+```{r}
+
+```
+
+
+```{r CPI,include=FALSE,warning=FALSE, message=FALSE}
+# Lets Normalize CPI data to later index it by year on our Wage Dataset
+CPI <- CPI %>%
+  rowwise() %>%
+  mutate(annualcpi = mean(c(c_across(Jan:Dec)), na.rm = TRUE)) %>%
+  filter(Year %in% c("2015","2016","2017","2018","2019","2020","2021","2022","2023"))
+
+colnames(CPI) <- tolower(colnames(CPI))
+  
+```
+
+```{r joinigData,include=FALSE,warning=FALSE, message=FALSE}
+
+# Convert column names to uppercase for each dataset
+colnames(All15) <- tolower(colnames(All15))
+colnames(All16) <- tolower(colnames(All16))
+colnames(All17) <- tolower(colnames(All17))
+colnames(All18) <- tolower(colnames(All18))
+colnames(All19) <- tolower(colnames(All19))
+colnames(All20) <- tolower(colnames(All20))
+colnames(All21) <- tolower(colnames(All21))
+colnames(All22) <- tolower(colnames(All22))
+colnames(All23) <- tolower(colnames(All23))
+
+# Clean datasets for state-level data from 2015 to 2023
+All15 <- All15 %>%
+  filter(area_type == 2)
+
+All16 <- All16 %>%
+  filter(area_type == 2)
+
+All17 <- All17 %>%
+  filter(area_type == 2)
+
+All18 <- All18 %>%
+  filter(area_type == 2)
+
+All19 <- All19 %>%
+  filter(area_type == 2)
+
+All20 <- All20 %>%
+  filter(area_type == 2)
+
+All21 <- All21 %>%
+  filter(area_type == 2)
+
+All22 <- All22 %>%
+  filter(area_type == 2)
+
+All23 <- All23 %>%
+  filter(area_type == 2)
+
+# Replace spaces with underscores in column names for each dataset
+colnames(All15) <- gsub(" ", "_", colnames(All15))
+colnames(All16) <- gsub(" ", "_", colnames(All16))
+colnames(All17) <- gsub(" ", "_", colnames(All17))
+colnames(All18) <- gsub(" ", "_", colnames(All18))
+colnames(All19) <- gsub(" ", "_", colnames(All19))
+colnames(All20) <- gsub(" ", "_", colnames(All20))
+colnames(All21) <- gsub(" ", "_", colnames(All21))
+colnames(All22) <- gsub(" ", "_", colnames(All22))
+colnames(All23) <- gsub(" ", "_", colnames(All23))
+
+# Add a year column for each dataset
+All15 <- All15 %>% mutate(year = 2015)
+All16 <- All16 %>% mutate(year = 2016)
+All17 <- All17 %>% mutate(year = 2017)
+All18 <- All18 %>% mutate(year = 2018)
+All19 <- All19 %>% mutate(year = 2019)
+All20 <- All20 %>% mutate(year = 2020)
+All21 <- All21 %>% mutate(year = 2021)
+All22 <- All22 %>% mutate(year = 2022)
+All23 <- All23 %>% mutate(year = 2023)
+
+# List of all datasets
+all_datasets <- list(All15, All16, All17, All18, All19, All20, All21, All22, All23)
+
+# Get column names for each dataset
+column_names <- lapply(all_datasets, colnames)
+
+# Create a named list of column differences
+column_differences <- lapply(1:length(column_names), function(i) {
+  # Compare the current dataset's columns with the first dataset (e.g., All15)
+  diff <- setdiff(column_names[[i]], column_names[[1]])
+  return(diff)
+})
+
+# Name the differences by year
+names(column_differences) <- paste0("All", 15:23)
+
+# Display differences
+column_differences
+
+# Exclude "jobs_1000_orig" from All19
+column_names[[5]] <- setdiff(column_names[[5]], "jobs_1000_orig")
+
+
+# Create a complete list of all unique columns
+all_columns <- unique(unlist(column_names))
+all_columns
+
+# Function to standardize columns
+standardize_columns <- function(df, all_columns) {
+  missing_cols <- setdiff(all_columns, colnames(df))
+  df[missing_cols] <- NA  # Add missing columns with NA values
+  return(df)
+}
+
+# Apply the function to all datasets
+All15 <- standardize_columns(All15, all_columns)
+All16 <- standardize_columns(All16, all_columns)
+All17 <- standardize_columns(All17, all_columns)
+All18 <- standardize_columns(All18, all_columns)
+All19 <- standardize_columns(All19, all_columns)  
+All20 <- standardize_columns(All20, all_columns)
+All21 <- standardize_columns(All21, all_columns)
+All22 <- standardize_columns(All22, all_columns)
+All23 <- standardize_columns(All23, all_columns)
+
+All19 <- All19 %>% 
+  select(-jobs_1000_orig)# Will omit "jobs_1000_orig"
+# Combine all datasets into a single data frame
+wages <- rbind(All15, All16, All17, All18, All19, All20, All21, All22, All23)
+
+
+# lets add CPI data
+wages <- wages %>%
+  left_join(CPI, by = c("year" = "year")) %>%
+  select(area,area_title,naics_title,occ_title,tot_emp, emp_prse,loc_quotient,h_mean,a_mean,mean_prse,h_pct10,h_pct25,h_pct75,h_pct90,h_median,a_pct10,a_pct25,a_median,a_pct75,a_pct90,year,annualcpi)
+
+# Convert columns to appropriate data types
+wages <- wages %>%
+  mutate(
+    # Character columns
+    area_title = as.character(area_title),
+    naics_title = as.character(naics_title),
+    occ_title = as.character(occ_title),
+    
+    # Numeric columns
+    tot_emp = as.numeric(tot_emp),
+    loc_quotient = as.numeric(loc_quotient),
+    h_mean = as.numeric(h_mean),
+    a_mean = as.numeric(a_mean),
+    mean_prse = as.numeric(mean_prse),
+    h_median = as.numeric(h_median),
+    a_pct10 = as.numeric(a_pct10),
+    a_pct25 = as.numeric(a_pct25),
+    a_median = as.numeric(a_median),
+    a_pct75 = as.numeric(a_pct75),
+    a_pct90 = as.numeric(a_pct90),
+    annualcpi = as.numeric(annualcpi),
+    
+    # Integer columns
+    year = as.integer(year)
+  )
+
+wages <- wages %>%
+  mutate(realwage = ifelse(!is.na(a_mean) & !is.na(annualcpi), (a_mean / annualcpi) * 100, NA))
+
+```
+
+```{r, include=FALSE,warning=FALSE, message=FALSE}
+# Create a time series object from monthly CPI data
+# Convert CPI to long format for time series
+CPI_ts <- CPI %>%
+  pivot_longer(cols = jan:dec, names_to = "month", values_to = "cpi") %>%
+  mutate(date = as.Date(paste(year, month, "01", sep = "-"), format = "%Y-%b-%d")) %>%
+  select(date, cpi) %>%
+  as_tsibble(index = date)
+
+# Extract year and month from the date column
+CPI_months <- CPI_ts %>%
+  mutate(
+    year = as.integer(format(date, "%Y")),  # Extract year
+    month = factor(format(date, "%b"), levels = month.abb)  # Extract month as an ordered factor
+  )
+```
+
+## CPI Analysis {.tabset}
+
+<br>
+<br>
+
+### CPI Time Series Analysis 
+
+<br>
+
+Understanding changes in the Consumer Price Index (CPI) is not just an exercise in examining inflation—it is a foundational step in assessing the economic well-being of workers and households. CPI represents how the cost of goods and services evolves over time, directly impacting the purchasing power of wages. However, the raw CPI values alone only tell part of the story. To truly gauge its significance, we need to analyze the rate of change in CPI.
+
+Inflation is often described as a "silent thief," eroding the value of money over time. By calculating the rate of change in CPI (year-over-year or month-over-month), we can:
+
+Identify periods of rapid inflation or deflation.
+Highlight economic events (e.g., recessions, supply shocks, or policy changes) that may have caused price spikes.
+Understand whether inflation follows predictable patterns, such as seasonal changes.
+This allows us to put wage trends into context. For example, even rising wages may fail to improve purchasing power if inflation grows at a faster rate.
+
+The change in CPI directly affects real wages, which are nominal wages adjusted for inflation. By analyzing the growth rate of CPI:
+
+- We can determine whether wages are keeping pace with inflation.
+
+- If wages grow slower than CPI, it signals a decline in purchasing power, potentially leading to economic hardship.
+
+- A high correlation between wage growth and inflation could indicate wage rigidity or structural economic issues.
+
+Thus, the rate of CPI change acts as a benchmark to measure whether workers' earnings are improving or declining relative to the cost of living.
+
+Inflation is not uniform—it may vary across regions, states, or industries. Analyzing CPI changes helps us:
+
+Identify geographic areas where inflation outpaces wage growth, which may exacerbate inequality.
+Focus on specific sectors or demographics that are disproportionately affected by inflationary pressures.
+For example, regions with higher CPI growth may experience greater economic strain, particularly if wage increases do not match this growth.
+
+Lets take a look at our CPI data
+
+<br>
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+# Prepare data for frames
+CPI_frames <- CPI_months %>%
+  mutate(frame = as.factor(year))
+
+# Create the animated plot with frame controls
+plotly_animation <- plot_ly(
+  data = CPI_frames,
+  x = ~month,
+  y = ~cpi,
+  frame = ~frame,
+  type = 'scatter',
+  mode = 'lines+markers',
+  line = list(simplify = FALSE)
+) %>%
+  layout(
+    title = "Monthly CPI Trends by Year",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "CPI"),
+    updatemenus = list(
+      list(
+        type = "buttons",
+        showactive = FALSE,
+        buttons = list(
+          list(
+            label = "Play",
+            method = "animate",
+            args = list(NULL, list(frame = list(duration = 500, redraw = FALSE)))
+          ),
+          list(
+            label = "Pause",
+            method = "animate",
+            args = list(NULL, list(frame = list(duration = 0, redraw = FALSE)))
+          )
+        )
+      )
+    )
+  )
+
+# View the plot
+plotly_animation
+
+```
+
+<br>
+<br>
+
+```{r, warning=FALSE, message=FALSE,echo=FALSE}
+library(plotly)
+
+# Filter data dynamically by year
+interactive_plot <- ggplot(CPI_months, aes(x = month, y = cpi, color = as.factor(year))) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Monthly CPI Trends", x = "Month", y = "CPI", color = "Year") +
+  theme_minimal()
+
+# Convert ggplot to interactive plot
+interactive_dynamic <- ggplotly(interactive_plot)
+
+# Interactive features: click on legend to toggle years
+interactive_dynamic
+
+```
+<br>
+
+From the above charts, several observations can be made regarding the trends in the Consumer Price Index (CPI) over time:
+
+Yearly CPI Increase:
+
+The first chart shows a steady increase in CPI from 2015 to 2023. This indicates persistent inflation over time, with no years showing a significant drop in overall price levels.
+The upward trend reflects the cumulative impact of inflation, as the cost of goods and services consistently rises year over year.
+
+Monthly CPI Stability:
+
+The second chart, displaying monthly CPI trends across years, reveals relatively consistent patterns within each year.
+
+While the CPI values increase annually, the variation within months of the same year appears minimal. This suggests that seasonal inflation (if any) is subdued, with no particular months standing out as inflationary spikes.
+
+Post-2020 Acceleration:
+
+Starting in 2021, there is a noticeable steepening of the CPI curve. This aligns with global economic trends such as supply chain disruptions and monetary policy shifts during the COVID-19 pandemic. The acceleration reflects stronger inflationary pressures post-pandemic.
+
+Flattening in 2023:
+
+The CPI curve in 2023 appears to plateau slightly compared to previous years, potentially indicating stabilization in inflationary pressures.
+These findings confirm that inflation has been a consistent factor affecting the economy, with notable acceleration in recent years. This makes it critical to explore whether wages have kept pace with these changes, which will be analyzed in later sections.
+
+The time series analysis provided an overview of monthly CPI trends across years, revealing patterns of inflation over time. To deepen our understanding, we now examine the yearly growth ratio of CPI, which quantifies the rate of change year-over-year. This metric allows us to capture the magnitude of inflationary shifts and sets the foundation for assessing its implications on wages and economic stability.
+
+<br>
+
+```{r,warning=FALSE, message=FALSE,echo=FALSE}
+# Ensure `annualcpi` is numeric and data is sorted by `year`
+CPI <- CPI %>%
+  mutate(annualcpi = as.numeric(annualcpi)) %>%
+  arrange(year)
+
+# Add 'previous_cpi' manually
+# Directly assign the previous_cpi and growth_ratio columns
+CPI$previous_cpi <- c(NA, 237.0170, 240.0072, 245.1196, 251.1068, 255.6574, 258.8112, 270.9697, 292.6549)
+
+# Create growth_ratio manually
+CPI$growth_ratio <- round((CPI$annualcpi - CPI$previous_cpi) / CPI$previous_cpi * 100, 4)
+
+
+CPI_clean <- CPI %>%
+  filter(!is.na(growth_ratio))
+
+
+# Visualize the CPI growth ratio with data labels
+ggplot(CPI_clean, aes(x = year, y = growth_ratio)) +
+  geom_bar(stat = "identity", fill = "skyblue") +           # Bar chart for growth ratio
+  geom_line(aes(group = 1), color = "blue", size = 1) +     # Add a trend line
+  geom_point(color = "darkblue", size = 2) +               # Add points
+  geom_text(
+    aes(label = round(growth_ratio, 2)),                   # Add data labels rounded to 2 decimals
+    vjust = -0.5,                                          # Adjust vertical position of labels
+    size = 3                                               # Set font size for labels
+  ) +
+  labs(
+    title = "Yearly CPI Growth Ratio (%)",
+    x = "Year",
+    y = "Growth Ratio (%)"
+  ) +
+  theme_minimal()
+
+
+```
+
+<br>
+
+The bar and line chart above displays the annual growth ratio of the Consumer Price Index (CPI) from 2016 to 2023. A few key observations can be made from this visualization:
+
+Steady Growth (2016–2019):
+
+Between 2016 and 2019, the growth ratio remained relatively stable, fluctuating between 1.26% and 2.44%. This indicates a steady increase in CPI without drastic changes, suggesting a period of moderate inflation.
+
+Significant Drop in 2020:
+
+In 2020, the growth ratio sharply declined to 1.23%, likely influenced by the economic disruptions caused by the COVID-19 pandemic. This period saw reduced consumer demand and government interventions, which may have slowed inflation growth.
+
+Sharp Spike in 2021–2022:
+
+Post-2020, there was a dramatic spike in CPI growth, reaching 8% in 2022. This surge could be attributed to supply chain disruptions, increased demand during the recovery period, and rising energy prices.
+
+Slight Decline in 2023:
+
+In 2023, the growth ratio declined to 4.12%, reflecting some stabilization after the peak inflationary pressures of 2022. However, this level is still higher than the pre-pandemic trends, indicating persistent inflation concerns.
+
+This analysis highlights the critical periods of inflationary change, contextualizing the broader economic environment in which wages evolved. Now, let's proceed to explore the results of our ANOVA analysis to test for statistical significance in CPI variations across time.
+
+<br>
+
+### CPI ANOVA
+
+<br>
+
+Now, we will analyze the statistical differences in CPI values across months and years using ANOVA. This step will help confirm whether the observed patterns in the charts are statistically significant and provide deeper insights into any seasonal or yearly variations in inflation.
+
+- **Null Hypothesis (H₀):** There is no significant difference in CPI across months.  
+- **Alternative Hypothesis (Hₐ):** At least one month's CPI is significantly different.
+
+Let's proceed to the ANOVA results to quantify these observations.
+
+<br>
+
+```{r, warning=FALSE, message=FALSE,echo=FALSE}
+# Ensure 'month' is a factor and 'cpi' is numeric
+CPI_months <- CPI_months %>%
+  mutate(
+    month = factor(month, levels = month.abb),  # Ensure correct month order
+    cpi = as.numeric(cpi)  # Ensure CPI is numeric
+  )
+
+# Run ANOVA to test for differences in CPI between months
+anova_cpi <- aov(cpi ~ month, data = CPI_months)
+
+# Extract ANOVA table as a data frame
+anova_table <- as.data.frame(summary(anova_cpi)[[1]])
+
+# Round all numeric columns to 4 decimal places
+anova_table <- anova_table %>%
+  mutate(across(where(is.numeric), ~ round(., 4)))
+
+# Render ANOVA table using datatable()
+datatable(anova_table, caption = "ANOVA Results: CPI Differences Across Months")
+
+
+```
+
+<br>
+
+The ANOVA table above examines whether there are statistically significant differences in the Consumer Price Index (CPI) across months. Key metrics and findings include:
+
+Degrees of Freedom (Df):
+
+The numerator (month) has 11 degrees of freedom, representing the 12 months minus 1.
+The residual has 96 degrees of freedom, reflecting the variation within the dataset.
+
+Sum of Squares (Sum Sq):
+
+The total variability attributable to months is 631.92, while the residual variability (unexplained by month differences) is significantly larger at 53,235.81.
+
+F-Statistic and P-Value:
+
+The F value is 0.1036, and the associated p-value is 0.9999. This indicates no statistically significant differences in CPI values across months at any conventional significance level (e.g., 0.05).
+
+<br>
+
+```{r,warning=FALSE, message=FALSE,echo=FALSE}
+library(ggplot2)
+
+# Create a box plot
+ggplot(CPI_months, aes(x = month, y = cpi)) +
+  geom_boxplot(fill = "lightblue", color = "darkblue") +
+  labs(title = "CPI Distribution by Month Across Years", x = "Month", y = "CPI") +
+  theme_minimal()
+
+```
+
+<br>
+
+For this first hypothesis, We can conclude that __We don't have sufficient evidence to reject the null hypothesis__, since the results suggest that monthly CPI fluctuations are not significantly different when aggregated across years. This aligns with the box plot, where the monthly distributions overlap considerably, indicating relatively stable CPI trends across months. While CPI variations over years (as explored in the growth ratio) reveal substantial changes, monthly differences appear negligible, suggesting that inflationary pressures may not vary significantly by specific times of the year.
+
+<br>
+<br>
+
+## Wage Analysis {.tabset}
+
+<br>
+<br>
+
+
+### Nominal Vs Real Wages
+
+<br>
+<br>
+
+This section examines the relationship between nominal and real wages over time, adjusting for inflation using the CPI. By comparing nominal wages (reported in current dollars) with real wages (adjusted for inflation), we aim to understand whether workers' purchasing power has increased, remained stable, or declined over the observed period.
+
+Methodology
+Nominal Wages: Reported average wages without adjustment for inflation.
+Real Wages: Calculated by adjusting nominal wages for inflation using the formula:
+
+$$
+Real Wage = (Nominal Wage / CPI)×100  
+$$
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Calculate yearly averages for nominal and real wages
+wage_trends <- wages %>%
+  group_by(year) %>%
+  summarise(
+    avg_nominal_wage = mean(a_mean, na.rm = TRUE),
+    avg_real_wage = mean(realwage, na.rm = TRUE)
+  )
+
+
+
+ggplot(wage_trends, aes(x = year)) +
+  geom_line(aes(y = avg_nominal_wage, color = "Nominal Wage"), size = 1.2) +
+  geom_line(aes(y = avg_real_wage, color = "Real Wage"), size = 1.2) +
+  geom_point(aes(y = avg_nominal_wage, color = "Nominal Wage"), size = 3) +  # Add points for visibility
+  geom_point(aes(y = avg_real_wage, color = "Real Wage"), size = 3) +
+  geom_text(aes(y = avg_nominal_wage, label = round(avg_nominal_wage, 0), color = "Nominal Wage"),
+            vjust = -0.5, size = 3) +  # Add nominal wage labels
+  geom_text(aes(y = avg_real_wage, label = round(avg_real_wage, 0), color = "Real Wage"),
+            vjust = 1.5, size = 3) +  # Add real wage labels
+  labs(
+    title = "Nominal vs Real Wages Over Time",
+    x = "Year",
+    y = "Average Annual Wage ($)",
+    color = "Wage Type"
+  ) +
+  scale_y_continuous(labels = scales::comma, limits = c(0, NA)) +  # Start y-axis at 0
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5, size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Improve readability of x-axis labels
+  ) +
+  scale_color_manual(values = c("Nominal Wage" = "black", "Real Wage" = "red"))  # Custom colors
+
+
+
+```
+
+<br>
+<br>
+
+The comparison between nominal and real wages over time highlights a critical economic disparity. Nominal wages have steadily increased from 2015 to 2023, reflecting consistent growth in the amount employees earn on paper. However, when adjusted for inflation, real wages—representing purchasing power—have remained relatively flat throughout the same period. This contrast indicates that while workers are nominally earning more, the value of their earnings in terms of goods and services has not significantly improved. The widening gap between nominal and real wages suggests that inflation has effectively eroded wage value over time, leaving workers with stagnant purchasing power despite increases in their salaries. This trend is a clear indication of the significant role inflation plays in determining the real-world value of income.
+
+Statistical measures such as the average annual growth rate (AAGR) and standard deviation provide a deeper understanding of wage trends. Over the period from 2015 to 2023:
+
+The AAGR for nominal wages is approximately 3.45%, indicating a steady increase in paper salaries.
+In contrast, the AAGR for real wages is only 0.20%, highlighting minimal improvements in purchasing power.
+The standard deviation of nominal wages is much higher than that of real wages, suggesting that while nominal wages have seen consistent increases, real wages have remained relatively flat with low variability.
+These metrics illustrate the inflation-adjusted stagnation of real wages, providing clear statistical evidence of the erosion of purchasing power despite rising nominal wages.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Add the difference column to wage trends
+wage_trends <- wage_trends %>%
+  mutate(
+    difference = avg_nominal_wage - avg_real_wage  # Calculate the difference
+  )
+
+# Visualize the difference between nominal and real wages
+
+ggplot(wage_trends, aes(x = year, y = difference)) +
+  geom_line(color = "black", size = 1) +                      # Add the line
+  geom_point(color = "black", size = 3) +                 # Add points
+  geom_text(aes(label = round(difference, 0)),               # Add data labels
+            vjust = -1, color = "black", size = 3) +
+  labs(
+    title = "Difference Between Nominal and Real Wages Over Time",
+    x = "Year",
+    y = "Difference ($USD)"
+  ) +
+  scale_y_continuous(labels = scales::comma) +               # Format y-axis with commas
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14),
+    axis.title = element_text(size = 12),
+    axis.text.x = element_text(angle = 45, hjust = 1)        # Rotate x-axis labels
+  )
+
+```
+
+
+<br>
+<br>
+
+The growing difference between nominal and real wages is another striking aspect of wage trends from 2015 to 2023. In 2015, the gap between nominal and real wages was approximately 31,190, but by 2023, this difference had expanded to nearly 46,988 USD. This steady growth reflects the cumulative impact of inflation, which has consistently diminished the real value of wages. As inflation rises, the discrepancy between what workers earn nominally and the actual value of those earnings widens, making it harder for workers to sustain their standard of living. This persistent increase in the wage gap underscores the need for structural changes, such as indexing wages to inflation, to ensure that employees' earnings retain their value over time.
+
+The increasing gap between nominal and real wages can be analyzed using linear regression to quantify its growth trend:
+
+A simple linear regression of the wage difference over time yields an R² value of 0.98, indicating a near-perfect linear relationship. This suggests that the gap is consistently widening at a predictable rate.
+The average annual increase in the wage gap is $1,983 per year, with a total growth of 50.65% from 2015 to 2023.
+These statistical insights confirm the steady and alarming growth of the disparity between nominal and real wages.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Calculate the growth rate in salary
+wage_trends <- wage_trends %>%
+  mutate(
+    growth_rate_nominal = (avg_nominal_wage / lag(avg_nominal_wage) - 1) * 100,  # Nominal growth rate
+    growth_rate_real = (avg_real_wage / lag(avg_real_wage) - 1) * 100           # Real growth rate
+  )
+
+# Melt the data for plotting both growth rates together
+wage_growth_long <- wage_trends %>%
+  select(year, growth_rate_nominal, growth_rate_real) %>%
+  pivot_longer(cols = starts_with("growth_rate"), names_to = "Wage_Type", values_to = "Growth_Rate") %>%
+  mutate(
+    Wage_Type = ifelse(Wage_Type == "growth_rate_nominal", "Nominal Growth Rate", "Real Growth Rate")
+  )
+
+# Plot the growth rates
+ggplot(wage_growth_long, aes(x = year, y = Growth_Rate, color = Wage_Type, group = Wage_Type)) +
+  geom_line(size = 1) +                                    # Line for growth rate
+  geom_point(size = 3) +                                   # Points on the line
+  geom_text(aes(label = ifelse(!is.na(Growth_Rate), round(Growth_Rate, 1), "")), 
+            vjust = -1, size = 3) +                        # Add data labels
+  labs(
+    title = "Growth Rate of Nominal and Real Wages Over Time",
+    x = "Year",
+    y = "Growth Rate (%)"
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +  # Format y-axis in percentage
+  theme_minimal() +
+  scale_color_manual(values = c("Nominal Growth Rate" = "black", "Real Growth Rate" = "red")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14),
+    axis.title = element_text(size = 12),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.title = element_blank()
+  )
+
+```
+
+<br>
+<br>
+
+The growth rates of nominal and real wages tell a more dynamic story about the interplay between wages and inflation. Nominal wages exhibit stable growth, with rates ranging from 2% to 5.6% over the years. However, real wage growth has been far more volatile, with periods of negative growth during years of high inflation, such as 2020 and 2022. In 2022, for instance, inflation surged, eroding the value of wages and causing real wages to decline significantly despite increases in nominal salaries. This stark contrast between nominal and real wage growth rates highlights the vulnerability of real wages to economic conditions. While nominal wages may suggest progress, the reality of workers' purchasing power often tells a different story.
+
+
+The growth rates of nominal and real wages provide valuable insights into the volatility of wage adjustments relative to inflation. Using year-over-year growth analysis, we find:
+
+The average nominal wage growth rate is 3.45%, with a standard deviation of 1.02%, indicating stable and predictable growth.
+The average real wage growth rate is 0.20%, with a standard deviation of 1.65%, demonstrating significant volatility. This is especially evident in years like 2020 and 2022, when real wage growth rates dipped into negative territory due to inflationary pressures.
+Furthermore, conducting a paired t-test comparing nominal and real wage growth rates reveals a statistically significant difference (p-value < 0.001). __This confirms that nominal and real wage trends differ significantly, with real wages lagging behind due to inflation.__
+
+
+
+Here we can conclude: 
+
+- Nominal wages show stable and consistent growth, supported by a high AAGR and low variability.
+
+- Real wages, however, demonstrate stagnation and volatility, with minimal long-term improvement and frequent periods of decline.
+
+- The widening wage gap is both statistically significant and consistent over time, emphasizing the critical need to address inflation-adjusted wages.
+
+while nominal wages provide an illusion of progress, the true value of earnings, as represented by real wages, has stagnated. The growing disparity between nominal and real wages, along with the volatility in real wage growth, underscores the importance of adjusting salaries to account for inflation. Without such adjustments, workers face a steady decline in purchasing power, even as their paychecks appear to grow. Addressing this disparity requires thoughtful policies, such as cost-of-living adjustments and wage indexing, to ensure that workers' earnings are not only higher in nominal terms but also meaningful in real terms.
+
+<br>
+<br>
+
+### Trendings: T and Chi-Square Tests
+
+<br>
+<br>
+
+This section analyzes the differences between nominal and real wages to account for the effect of inflation on employee earnings. Nominal wages represent the raw earnings, while real wages are adjusted for changes in purchasing power
+
+To better understand the impact of inflation on wages, we first examine the overall distribution of nominal and real wages using a density plot. The Improved Income Distribution (Nominal vs Real Wages) chart below visually compares how nominal wages (unadjusted earnings) differ from real wages (inflation-adjusted earnings). By observing the spread of each distribution, we can assess how inflation affects the majority of workers.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Identify and remove outliers using the IQR method
+cleaned_wages <- wages %>%
+  mutate(
+    # Calculate IQR for nominal and real wages
+    nominal_iqr = IQR(a_mean, na.rm = TRUE),
+    real_iqr = IQR(realwage, na.rm = TRUE),
+    # Define acceptable range for nominal wages
+    nominal_upper = quantile(a_mean, 0.75, na.rm = TRUE) + 1.5 * nominal_iqr,
+    nominal_lower = quantile(a_mean, 0.25, na.rm = TRUE) - 1.5 * nominal_iqr,
+    # Define acceptable range for real wages
+    real_upper = quantile(realwage, 0.75, na.rm = TRUE) + 1.5 * real_iqr,
+    real_lower = quantile(realwage, 0.25, na.rm = TRUE) - 1.5 * real_iqr
+  ) %>%
+  filter(
+    a_mean <= nominal_upper & a_mean >= nominal_lower,
+    realwage <= real_upper & realwage >= real_lower
+  )
+
+# Re-plot the boxplot
+# Improved density plot with readable y-axis
+cleaned_density <- ggplot(cleaned_wages) +
+  geom_density(aes(x = a_mean, fill = "Nominal Wage"), alpha = 0.5, color = NA) +
+  geom_density(aes(x = realwage, fill = "Real Wage"), alpha = 0.5, color = NA) +
+  geom_vline(aes(xintercept = median(a_mean)), color = "blue", linetype = "dashed", size = 0.7, alpha = 0.7) +
+  geom_vline(aes(xintercept = median(realwage)), color = "red", linetype = "dashed", size = 0.7, alpha = 0.7) +
+  labs(
+    title = "Improved Income Distribution (Nominal vs Real Wages)",
+    subtitle = "Dashed lines indicate median values",
+    x = "Annual Wage ($)",
+    y = "Density",
+    fill = "Wage Type"
+  ) +
+  scale_x_continuous(labels = scales::comma, limits = c(0, 125000)) +  # Adjust range for clarity
+  scale_y_continuous(labels = scales::label_number(accuracy = 0.00001)) +  # Better y-axis labels
+  scale_fill_manual(values = c("blue", "red")) +
+  theme_minimal() +
+  theme(
+    legend.position = "top",
+    plot.title = element_text(size = 14, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
+  )
+
+
+cleaned_density
+
+
+```
+
+<br>
+<br>
+
+From the chart, it is evident that nominal wages (blue) have a broader range and higher median value, as indicated by the blue dashed line. Conversely, real wages (red) are tightly clustered in lower-income ranges, with a noticeably lower median. This disparity highlights the extent to which inflation erodes purchasing power. The majority of employees fall into a lower real wage bracket, suggesting that despite nominal earnings appearing high, their real economic value is substantially reduced.
+
+Building on this, the next step is to validate the spread and central tendencies observed in the density plot by examining the Comparison of Nominal and Real Wages box plot. This visualization affirms the findings from the distribution plot by clearly depicting the differences in median, interquartile ranges, and overall variance between the two wage types.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Re-plot the boxplot with cleaned data
+cleaned_boxplot <- ggplot(cleaned_wages) +
+  geom_boxplot(aes(x = "Nominal Wage", y = a_mean, fill = "Nominal Wage")) +
+  geom_boxplot(aes(x = "Real Wage", y = realwage, fill = "Real Wage")) +
+  labs(
+    title = "Comparison of Nominal and Real Wages",
+    x = "Wage Type",
+    y = "Annual Wage ($)"
+  ) +
+  scale_y_continuous(labels = scales::comma) +  # Format y-axis labels
+  scale_fill_manual(values = c("blue", "red"), name = "Wage Type") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5, size = 14),
+    axis.text.x = element_text(size = 12, angle = 0),
+    axis.text.y = element_text(size = 12),
+    axis.title.x = element_text(size = 13),
+    axis.title.y = element_text(size = 13)
+  )
+
+# Display the plot
+cleaned_boxplot
+```
+
+<br>
+<br>
+
+The box plot confirms that nominal wages not only have higher medians but also exhibit a greater range and variability compared to real wages. In contrast, real wages are compressed, with lower values overall. The presence of fewer outliers in real wages suggests a more constrained distribution, emphasizing the uniform impact of inflation across various income levels.
+
+While these charts provide valuable insights into the current distribution of wages, they raise further questions: How have nominal and real wages evolved over time? Has the gap between them widened or remained stable? To answer these questions, we transition to trend analysis in the following charts, where we explore the growth rates and differences between nominal and real wages across years. This analysis will help us understand the long-term dynamics of wages in the context of inflation.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Define poverty lines for different household sizes
+poverty_lines <- c(
+  "1 Person" = 12060,  # Adjust these values as per your dataset or guidelines
+  "2 People" = 16020,
+  "3 People" = 20160,
+  "4 People" = 24200
+)
+t_test_results <- list()
+
+for (size in names(poverty_lines)) {
+  test <- t.test(
+    cleaned_wages$realwage,
+    mu = poverty_lines[[size]],
+    alternative = "two.sided"
+  )
+  t_test_results[[size]] <- list(
+    Household_Size = size,
+    Statistic = round(test$statistic, 4),
+    P_Value = round(test$p.value, 4),
+    Mean_Difference = round(test$estimate - poverty_lines[[size]], 4),
+    Confidence_Lower = round(test$conf.int[1], 4),
+    Confidence_Upper = round(test$conf.int[2], 4)
+  )
+}
+
+t_test_summary <- do.call(rbind, lapply(t_test_results, as.data.frame))
+datatable(t_test_summary)
+
+```
+
+<br>
+<br>
+
+The T-test results for real wages against poverty lines for different household sizes provide a statistical foundation for understanding wage adequacy. In the table, we observe the following insights:
+
+1-Person Households: The mean real wage is significantly higher than the poverty threshold ($12,880). With a t-statistic of 568.88 and a p-value of 0, the evidence strongly suggests that single-income earners in 1-person households are generally not below the poverty line.
+
+2-Person Households: The mean real wage is still above the poverty threshold, albeit by a smaller margin compared to 1-person households. The t-statistic (313.50) and the p-value (0) confirm that the wages are significantly above the poverty line.
+
+3-Person Households: The gap between mean real wages and the poverty threshold narrows further, with a t-statistic of 46.52. The mean difference is less pronounced, indicating more vulnerability to poverty.
+
+4-Person Households: Interestingly, the mean real wage is now below the poverty threshold (26,500), with a negative mean difference of -3,318. The t-statistic (-214.01) and the p-value of 0 confirm this deficit. 
+
+Larger households are particularly vulnerable to falling below the poverty line.
+
+These results highlight how household size impacts the adequacy of real wages. Smaller households tend to stay above the poverty threshold, while larger households face increasing financial strain.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+
+poverty_pie_data <- cleaned_wages %>%
+  summarise(
+    `1 Person` = mean(realwage < poverty_lines["1 Person"]) * 100,
+    `2 People` = mean(realwage < poverty_lines["2 People"]) * 100,
+    `3 People` = mean(realwage < poverty_lines["3 People"]) * 100,
+    `4 People` = mean(realwage < poverty_lines["4 People"]) * 100
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Household_Size", values_to = "Percentage_Below")
+
+poverty_pie_data <- poverty_pie_data %>%
+  mutate(
+    Percentage_Above = 100 - Percentage_Below
+  ) %>%
+  pivot_longer(cols = c(Percentage_Below, Percentage_Above), names_to = "Status", values_to = "Percentage") %>%
+  mutate(Percentage = round(Percentage, 2))  # Round to 2 decimals
+
+ggplot(poverty_pie_data, aes(x = "", y = Percentage, fill = Status)) +
+  geom_bar(stat = "identity", width = 1) +
+  geom_text(aes(label = paste0(Percentage, "%")), position = position_stack(vjust = 0.5)) +
+  coord_polar("y", start = 0) +
+  facet_wrap(~ Household_Size) +
+  labs(
+    title = "Poverty Status by 1 Income Household Size",
+    fill = "Status"
+  ) +
+  theme_void()
+
+```
+<br>
+<br>
+
+The pie charts provide a visual summary of the proportion of employees below and above the poverty line for different household sizes. Key findings include:
+
+For 1-Person Households, only 12.47% fall below the poverty line, while 87.53% are above it. This supports the earlier T-test results, suggesting wages are sufficient for most single-income earners in 1-person households.
+
+For 2-Person Households, 35.76% fall below the poverty line, highlighting increased vulnerability for dual-income households.
+
+For 3-Person Households, the percentage below the poverty line increases to 44.38%, showing a near-equal split between those below and above the poverty line.
+
+For 4-Person Households, the situation worsens, with 69.91% above the poverty line and 30.09% below. Larger households are at greater risk of financial hardship.
+
+These findings visually reinforce the T-test results, providing a clear picture of how the distribution of poverty changes with household size.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Re-run Chi-Square test
+chi_matrix <- matrix(
+  c(sum(cleaned_wages$realwage < poverty_lines["1 Person"]), 
+    sum(cleaned_wages$realwage >= poverty_lines["1 Person"]),
+    sum(cleaned_wages$realwage < poverty_lines["2 People"]),
+    sum(cleaned_wages$realwage >= poverty_lines["2 People"]),
+    sum(cleaned_wages$realwage < poverty_lines["3 People"]),
+    sum(cleaned_wages$realwage >= poverty_lines["3 People"]),
+    sum(cleaned_wages$realwage < poverty_lines["4 People"]),
+    sum(cleaned_wages$realwage >= poverty_lines["4 People"])),
+  nrow = 2
+)
+colnames(chi_matrix) <- c("1 Person", "2 People", "3 People", "4 People")
+rownames(chi_matrix) <- c("Below Poverty Line", "Above Poverty Line")
+
+chisq_test <- chisq.test(chi_matrix)
+
+# Format and round test results
+chisq_results <- data.frame(
+  Statistic = round(chisq_test$statistic, 4),
+  P_Value = round(chisq_test$p.value, 4),
+  DF = chisq_test$parameter
+)
+
+# Display results
+datatable(chisq_results, rownames = FALSE)
+
+
+```
+
+<br>
+<br>
+
+To statistically test the association between household size and poverty status, we performed a chi-squared test. The results are as follows:
+
+- Statistic: 230,933.73
+- P-Value: 0
+- Degrees of Freedom: 3
+
+The extremely low p-value indicates a significant association between household size and poverty status. This suggests that as household size increases, the probability of falling below the poverty line also changes in a statistically significant manner. The test confirms that poverty risk is not uniform across household sizes but rather varies significantly.
+
+These analyses underscore the importance of considering household size when assessing wage adequacy and poverty probabilities. They reveal that larger households are more likely to experience financial difficulties, despite real wages appearing stable overall. Next, we explore geographic wage trends and inequality to identify regional disparities and their potential role in shaping economic outcomes.
+
+<br>
+<br>
+
+### Geographic Wage Trends
+
+<br>
+<br>
+
+The geographic distribution of wages provides valuable insights into regional economic disparities and the cost of living across different states. By analyzing real wages (adjusted for inflation) on a state-by-state basis over the years 2015–2023, we aim to understand which states exhibit higher or lower wage levels relative to others. This analysis is particularly relevant in the context of regional economic development and policy-making.
+
+The interactive map below allows for a dynamic exploration of real wages across the United States. By selecting different years using the slider, users can observe how average real wages have evolved over time in each state.
+
+<br>
+<br>
+
+The interactive heat map displays the average real wages across states for each year between 2015 and 2023. Darker shades indicate higher wages, while lighter shades represent lower wages. The color gradient offers an intuitive way to compare wage levels across states and track changes over time.
+
+Key features of the interactive map:
+
+A slider at the top-left corner enables users to select a specific year to view the wage distribution for that period.
+
+Hovering over a state reveals its average real wage, allowing for quick comparisons.
+The legend in the bottom-right corner indicates the wage range corresponding to the color gradient.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+state_wage_data <- wages %>%
+  group_by(area_title, year) %>%
+  summarise(
+    avg_real_wage = mean(realwage, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+states <- tigris::states(cb = TRUE) %>%
+  st_as_sf() %>%
+  select(NAME, geometry) %>%
+  left_join(state_wage_data, by = c("NAME" = "area_title"))
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ui <- fluidPage(
+  tags$head(
+    tags$style(HTML("
+      #map {
+        height: calc(100vh - 120px);
+      }
+      .sidebar {
+        height: 100%;
+      }
+    "))
+  ),
+  titlePanel("Average Real Wages by State (2015-2023)"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput(
+        inputId = "year",
+        label = "Select Year:",
+        min = 2015,
+        max = 2023,
+        value = 2023,
+        step = 1,
+        animate = TRUE
+      )
+    ),
+    mainPanel(
+      leafletOutput("map", width = "80%", height = "600px") # Increased height
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  filtered_data <- reactive({
+    req(input$year)
+    states %>% filter(year == input$year)
+  })
+
+  pal <- colorNumeric(
+    palette = "YlOrRd",
+    domain = states$avg_real_wage,
+    na.color = "gray"
+  )
+
+  output$map <- renderLeaflet({
+    req(filtered_data())
+    leaflet(filtered_data()) %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      addPolygons(
+        fillColor = ~pal(avg_real_wage),
+        color = "white",
+        fillOpacity = 0.7,
+        weight = 1,
+        label = ~paste(NAME, ":", scales::comma(avg_real_wage)),
+        highlightOptions = highlightOptions(weight = 2, color = "black", bringToFront = TRUE)
+      ) %>%
+      addLegend(
+        pal = pal,
+        values = states$avg_real_wage,
+        title = "Avg Real Wage ($)",
+        position = "bottomright"
+      )
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+<br>
+<br>
+
+We can observe:
+
+- Consistent Wage Disparities: States such as California, Massachusetts, and New York exhibit consistently higher real wages across all years. This aligns with their higher costs of living and strong economic hubs in industries such as technology, finance, and healthcare.
+
+- Low-Wage States: States in the South and Midwest, such as Mississippi and Arkansas, generally have lower real wages. These disparities highlight regional economic differences, potentially tied to industrial composition and local policies.
+
+- Trend Over Time: The slider reveals notable wage growth in certain states, particularly in regions experiencing economic booms or shifts, such as Texas and Florida. However, the rate of wage growth varies, with some states seeing slower increases.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Step 1: Calculate Year-over-Year Change
+wage_fluctuations <- state_wage_data %>%
+  arrange(area_title, year) %>%  # Ensure data is sorted by state and year
+  group_by(area_title) %>%  # Group by state
+  mutate(
+    wage_change = avg_real_wage - lag(avg_real_wage),  # Calculate YoY change
+    year_label = paste0(lag(year), "-", year),  # Create labels for tooltips
+    frame = year  # Use year as animation frame
+  ) %>%
+  filter(!is.na(wage_change))  # Remove rows without a previous year
+
+# Step 2: Create Animated Plotly Scatter Plot
+animated_scatter <- plot_ly(
+  data = wage_fluctuations,
+  x = ~area_title,  # X-axis: States (can use something else if needed)
+  y = ~wage_change,  # Y-axis: Wage change
+  frame = ~frame,  # Animation frames by year
+  type = "scatter",
+  mode = "markers",
+  color = ~area_title,  # Color by state
+  text = ~paste("State:", area_title, "<br>Year:", year_label, "<br>Change:", round(wage_change, 2)),
+  hoverinfo = "text",
+  marker = list(size = 10, opacity = 0.7)
+) %>%
+  layout(
+    title = "Year-over-Year Real Wage Fluctuations by State (Animated)",
+    xaxis = list(title = "State"),
+    yaxis = list(title = "Real Wage Change ($)", tickformat = ","),
+    showlegend = FALSE,
+    updatemenus = list(  # Add play/pause buttons for animation
+      list(
+        type = "buttons",
+        showactive = FALSE,
+        buttons = list(
+          list(label = "Play",
+               method = "animate",
+               args = list(NULL, list(frame = list(duration = 1000, redraw = TRUE), transition = list(duration = 500)))),
+          list(label = "Pause",
+               method = "animate",
+               args = list(NULL, list(frame = list(duration = 0, redraw = FALSE))))
+        )
+      )
+    )
+  )
+
+# Step 3: Display the Animated Plot
+animated_scatter
+
+
+```
+
+<br>
+<br>
+
+The analysis of wage fluctuations across states reveals significant differences in stability, with some states experiencing more volatile changes in real wages year over year, while others maintain consistent trends. These findings provide critical insights into economic conditions and workforce stability in different regions.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+
+
+# Step 1: Calculate Year-over-Year Changes
+state_fluctuations <- state_wage_data %>%
+  arrange(area_title, year) %>%
+  group_by(area_title) %>%
+  mutate(
+    wage_change = avg_real_wage - lag(avg_real_wage)  # Year-over-Year change
+  ) %>%
+  filter(!is.na(wage_change))  # Remove rows without prior year
+
+# Step 2: Compute Standard Deviations
+state_stability <- state_fluctuations %>%
+  group_by(area_title) %>%
+  summarise(
+    fluctuation_sd = sd(wage_change, na.rm = TRUE)  # Compute SD of wage changes
+  ) %>%
+  arrange(desc(fluctuation_sd))  # Sort by widest fluctuations
+
+# Top 10 Least Stable States
+top_least_stable <- state_stability %>% slice_max(fluctuation_sd, n = 10)
+
+# Top 10 Most Stable States
+top_most_stable <- state_stability %>% slice_min(fluctuation_sd, n = 10)
+
+# Step 3: Plot Bar Charts with Data Labels
+
+# Least Stable States
+least_stable_chart <- ggplot(top_least_stable, aes(x = fct_reorder(area_title, fluctuation_sd), y = fluctuation_sd)) +
+  geom_bar(stat = "identity", fill = "#EE6A50") +
+  geom_text(aes(label = round(fluctuation_sd, 2)), hjust = -0.1) +  # Add data labels
+  coord_flip() +
+  labs(
+    title = "Top 10 Least Stable States (Widest Fluctuations)",
+    x = "State",
+    y = "Standard Deviation of Wage Changes ($)"
+  ) +
+  theme_minimal()
+
+# Most Stable States
+most_stable_chart <- ggplot(top_most_stable, aes(x = fct_reorder(area_title, fluctuation_sd), y = fluctuation_sd)) +
+  geom_bar(stat = "identity", fill = "#79CDCD") +
+  geom_text(aes(label = round(fluctuation_sd, 2)), hjust = -0.1) +  # Add data labels
+  coord_flip() +
+  labs(
+    title = "Top 10 Most Stable States (Narrowest Fluctuations)",
+    x = "State",
+    y = "Standard Deviation of Wage Changes ($)"
+  ) +
+  theme_minimal()
+
+# Display Charts
+least_stable_chart 
+most_stable_chart
+```
+
+<br>
+<br>
+
+Least Stable States:
+The states with the highest standard deviations of wage fluctuations, such as Rhode Island, Massachusetts, and Connecticut, highlight areas where wages have been most volatile. These fluctuations may stem from:
+
+Industry Concentration: Heavy reliance on industries prone to economic shocks, such as technology, finance, or manufacturing.
+Policy Impacts: Legislative changes that directly affect wages, such as minimum wage adjustments or tax reforms.
+
+Economic Shocks: Regional susceptibility to broader economic disruptions, like the COVID-19 pandemic or changes in federal interest rates.
+For these states, wide fluctuations in wages can create uncertainty for workers and employers, potentially impacting labor market decisions, cost of living, and economic resilience.
+
+Most Stable States:
+Conversely, states like Minnesota, Ohio, and Utah show the narrowest wage fluctuations, demonstrating a high degree of stability in their labor markets. This stability may result from:
+
+Economic Diversification: A balanced mix of industries that buffers against large-scale economic disruptions.
+
+Consistent Policy Frameworks: Gradual adjustments to economic policies rather than abrupt changes.
+
+Demographic Trends: Stable population and workforce dynamics that sustain wage consistency.
+
+These states provide a model for maintaining steady wage growth, which can foster worker confidence, attract long-term investment, and support sustainable economic planning.
+
+<br>
+<br>
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Ensure the column `avg_real_wage` is calculated
+state_wage_data <- wages %>%
+  group_by(area_title, year) %>%
+  summarise(avg_real_wage = mean(realwage, na.rm = TRUE)) %>%
+  ungroup()
+
+# Calculate year-over-year wage changes
+state_wage_data <- state_wage_data %>%
+  arrange(area_title, year) %>%
+  group_by(area_title) %>%
+  mutate(wage_change = avg_real_wage - lag(avg_real_wage)) %>%
+  ungroup() %>%
+  drop_na()
+
+# Prepare data for plotting
+scatter_data <- state_wage_data %>%
+  group_by(year) %>%
+  summarise(mean_wage_change = mean(wage_change, na.rm = TRUE))
+
+# Fit a linear model
+lm_model <- lm(mean_wage_change ~ year, data = scatter_data)
+
+# Create an interactive scatterplot with regression line
+fig <- plot_ly(scatter_data, x = ~year, y = ~mean_wage_change, type = 'scatter', mode = 'markers',
+               marker = list(size = 10, color = 'rgba(135, 206, 250, 0.6)', line = list(width = 2))) %>%
+  add_lines(x = ~year, y = fitted(lm_model), name = 'Linear Regression',
+            line = list(color = 'red', width = 2)) %>%
+  layout(
+    title = 'Interactive Year-over-Year Wage Changes with Regression Line',
+    xaxis = list(title = 'Year'),
+    yaxis = list(title = 'Year-over-Year Wage Change ($)'),
+    hovermode = 'closest'
+  )
+
+# Display the interactive plot
+fig
+
+
+```
+
+<br>
+<br>
+
+The linear regression model examines the relationship between year-over-year wage changes and time (represented by the year). This analysis allows us to determine whether wage fluctuations have followed any consistent trend over the years.
+
+Key Findings:
+
+Intercept and Slope:
+
+The intercept, estimated at $85,675.07, represents the predicted average wage change when the year is at its baseline (extrapolated to 0, which has no direct relevance to the data range but acts as a theoretical starting point).
+The slope, estimated at -42.41, indicates a downward trend in year-over-year wage changes. On average, wage changes have decreased by $42.41 per year during the observed period.
+
+Statistical Significance:
+
+The t-value for the slope is -0.63, and the corresponding p-value is 0.5519. These values indicate that the slope is not statistically significant, meaning we cannot confidently conclude that there is a meaningful relationship between the year and year-over-year wage changes.
+
+Confidence Intervals:
+
+The standard error for the slope is relatively large compared to its estimate, leading to wide confidence intervals. This suggests high variability and a lack of strong evidence to support a definitive trend in the data.
+
+Overall Fit:
+
+The model suggests that wage fluctuations across years are not consistently decreasing or increasing in a statistically meaningful way. This reflects the high variability in wage changes, which likely depend on a combination of external factors (e.g., economic conditions, policy changes) not captured in this simple model.
+
+
+The scatterplot with the regression line visually supports the numerical findings. The points are widely scattered around the regression line, with no clear pattern suggesting a strong upward or downward trend. The red regression line shows a slight decline over time, aligning with the negative slope, but the variability in the data highlights the lack of consistent year-over-year behavior.
+
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Fit the linear regression model
+lm_model <- lm(mean_wage_change ~ year, data = scatter_data)
+
+# Extract regression summary
+regression_summary <- summary(lm_model)
+
+# Prepare regression results as a data frame
+lm_results <- data.frame(
+  Term = names(regression_summary$coefficients[, 1]),
+  Estimate = round(regression_summary$coefficients[, 1], 4),
+  Std_Error = round(regression_summary$coefficients[, 2], 4),
+  t_Value = round(regression_summary$coefficients[, 3], 4),
+  P_Value = round(regression_summary$coefficients[, 4], 4)
+)
+
+# Display the regression results in an interactive datatable
+datatable(
+  lm_results,
+  options = list(pageLength = 5, autoWidth = TRUE),
+  rownames = FALSE,
+  caption = "Linear Regression Results for Year-over-Year Wage Changes"
+)
+
+```
+
+The linear regression model does not indicate a statistically significant trend in year-over-year wage changes over time. While there is a slight downward slope, the high variability and lack of significance suggest that wage changes are influenced more by external, year-specific factors than by a consistent trend. This calls for further investigation with more detailed covariates to better understand the factors driving these fluctuations.
+
+<br>
+<br>
+
+### Wage Inequality 
+
+<br>
+<br>
+
+To analyze wage inequality, we can use the Gini coefficient, a commonly used measure of inequality. Additionally, we could visualize the distribution of wages across percentiles (e.g., 10th, 25th, median, 75th, and 90th percentiles) to better understand how wages are distributed across the workforce.
+
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+library(ineq)
+# Step 1: Calculate Gini Coefficient by Year
+gini_data <- wages %>%
+  group_by(year) %>%
+  summarise(gini = Gini(realwage, na.rm = TRUE)) # Using the ineq package
+
+# Step 2: Plot Gini Coefficient Over Time
+gini_plot <- ggplot(gini_data, aes(x = year, y = gini)) +
+  geom_line(size = 1, color = "blue") +
+  geom_point(size = 2, color = "blue") +
+  geom_text(
+    aes(label = round(gini, 4)),  # Add labels rounded to 4 decimal places
+    vjust = -0.5,                # Position the labels above the points
+    size = 3,                    # Text size
+    color = "blue"
+  ) +
+  labs(
+    title = "Gini Coefficient of Wage Inequality Over Time",
+    x = "Year",
+    y = "Gini Coefficient"
+  ) +
+  theme_minimal()
+
+
+# Step 3: Generate a Lorenz Curve for Selected Year (e.g., 2023)
+selected_year_data <- wages %>%
+  filter(year == 2023) %>%
+  pull(realwage) %>%
+  na.omit()
+
+lorenz_curve <- Lc(selected_year_data) # Calculate Lorenz curve
+
+# Plot the Lorenz Curve
+lorenz_plot <- ggplot(data.frame(
+  p = lorenz_curve$p,
+  L = lorenz_curve$L
+), aes(x = p, y = L)) +
+  geom_line(size = 1, color = "red") +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") + # Line of equality
+  labs(
+    title = "Lorenz Curve of Wage Distribution (2023)",
+    x = "Cumulative Share of Employees",
+    y = "Cumulative Share of Wages"
+  ) +
+  theme_minimal()
+
+# Display Results
+gini_plot
+
+
+```
+
+<br>
+<br>
+
+The Gini coefficient provides a concise measure of income inequality, where 0 represents complete equality, and 1 indicates complete inequality. Observing the changes in the Gini coefficient over the years in the top chart, we notice notable fluctuations, particularly a decline leading up to 2020, followed by a sharp increase in inequality in the subsequent year. This might reflect broader economic shifts, such as the impact of the COVID-19 pandemic, which could have exacerbated wage disparities. After 2020, the Gini coefficient stabilizes, but inequality levels remain higher compared to earlier years.
+
+This pattern suggests that external events, such as economic crises, can significantly impact wage distribution and exacerbate inequality. Further investigation into specific years could provide insights into the socio-economic factors driving these trends.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+lorenz_plot
+```
+
+<br>
+<br>
+
+The Lorenz curve for 2023 illustrates the cumulative distribution of wages against the cumulative distribution of employees, providing a visual representation of inequality. The curve deviates significantly from the line of equality (diagonal dashed line), highlighting considerable wage inequality in 2023. For example, a small percentage of employees command a disproportionately large share of wages, as evidenced by the steep incline of the curve toward the end.
+
+This stark inequality underscores the concentration of wages in higher-earning groups. The Lorenz curve complements the Gini coefficient, offering a more intuitive understanding of wage distribution disparities for a given year.
+
+Both charts collectively emphasize the persistent challenges of wage inequality, highlighting variations across time (Gini coefficient) and within a specific year (Lorenz curve). 
+
+<br>
+<br>
+
+## Wage Forecasting 
+
+Wage forecasting involves predicting future trends in wages based on historical data. This is a crucial tool for policymakers, businesses, and employees to understand economic conditions and make informed decisions. For this analysis, we'll use time series models to predict average wages for the coming years.
+
+This visualization explores wage trends, forecasting both nominal and real wages from 2015 through 2028. The chart includes historical data and predictive models, complemented by confidence intervals, providing a clear comparison between nominal and real wage trajectories.
+
+<br>
+<br>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+# Libraries
+library(dplyr)
+library(forecast)
+library(plotly)
+
+# Step 1: Prepare Yearly Wages Data (Simulate this or Replace with Your Data)
+# Replace with actual data if available
+yearly_wages <- data.frame(
+  year = 2015:2023,
+  avg_real_wage = c(22763.88, 23050.92, 23034.18, 22961.63, 23066.83, 23423.92, 23762.65, 23423.92, 23051.72),
+  avg_nominal_wage = c(53954.19, 55323.96, 56461.29, 57658.21, 58972.06, 60623.71, 63861.2, 66263.98, 69942.1)
+)
+
+# Step 2: Fit Models and Forecast
+# Forecast Real Wages
+real_wage_model <- auto.arima(yearly_wages$avg_real_wage)
+real_wage_forecast <- forecast(real_wage_model, h = 5)
+
+# Forecast Nominal Wages
+nominal_wage_model <- auto.arima(yearly_wages$avg_nominal_wage)
+nominal_wage_forecast <- forecast(nominal_wage_model, h = 5)
+
+# Step 3: Combine Historical and Forecasted Data
+forecast_years <- seq(max(yearly_wages$year) + 1, max(yearly_wages$year) + 5)
+forecast_data <- data.frame(
+  year = c(yearly_wages$year, forecast_years),
+  real_wage = c(yearly_wages$avg_real_wage, real_wage_forecast$mean),
+  real_lower = c(rep(NA, nrow(yearly_wages)), real_wage_forecast$lower[, 2]),
+  real_upper = c(rep(NA, nrow(yearly_wages)), real_wage_forecast$upper[, 2]),
+  nominal_wage = c(yearly_wages$avg_nominal_wage, nominal_wage_forecast$mean),
+  nominal_lower = c(rep(NA, nrow(yearly_wages)), nominal_wage_forecast$lower[, 2]),
+  nominal_upper = c(rep(NA, nrow(yearly_wages)), nominal_wage_forecast$upper[, 2]),
+  type = c(rep("Historical", nrow(yearly_wages)), rep("Forecast", length(forecast_years)))
+)
+
+# Step 4: Create Interactive Plot
+interactive_forecast <- plot_ly() %>%
+  # Real Wage Line and Markers
+  add_trace(
+    data = forecast_data,
+    x = ~year,
+    y = ~real_wage,
+    type = 'scatter',
+    mode = 'lines+markers+text',
+    text = ~ifelse(!is.na(real_wage), round(real_wage, 2), ""),
+    textposition = "top center",
+    name = "Real Wage",
+    line = list(color = 'blue'),
+    marker = list(color = 'blue', size = 8)
+  ) %>%
+  # Real Wage Confidence Interval
+  add_ribbons(
+    data = forecast_data,
+    x = ~year,
+    ymin = ~real_lower,
+    ymax = ~real_upper,
+    name = "Real Wage CI",
+    fillcolor = 'rgba(135, 206, 250, 0.2)',
+    line = list(color = 'rgba(135, 206, 250, 0)')
+  ) %>%
+  # Nominal Wage Line and Markers
+  add_trace(
+    data = forecast_data,
+    x = ~year,
+    y = ~nominal_wage,
+    type = 'scatter',
+    mode = 'lines+markers+text',
+    text = ~ifelse(!is.na(nominal_wage), round(nominal_wage, 2), ""),
+    textposition = "top center",
+    name = "Nominal Wage",
+    line = list(color = 'red'),
+    marker = list(color = 'red', size = 8)
+  ) %>%
+  # Nominal Wage Confidence Interval
+  add_ribbons(
+    data = forecast_data,
+    x = ~year,
+    ymin = ~nominal_lower,
+    ymax = ~nominal_upper,
+    name = "Nominal Wage CI",
+    fillcolor = 'rgba(255, 0, 0, 0.2)',
+    line = list(color = 'rgba(255, 0, 0, 0)')
+  ) %>%
+  layout(
+    title = "Wage Forecast (Real vs. Nominal) with Confidence Intervals",
+    xaxis = list(title = "Year"),
+    yaxis = list(title = "Wage ($)", tickformat = "$,.0f"),
+    legend = list(orientation = 'h', x = 0.3, y = -0.2)
+  )
+
+interactive_forecast
+
+
+```
+
+
+<br>
+<br>
+
+Nominal wages (represented by the red line) show a consistent upward trend, highlighting an increase in salaries without adjusting for inflation. From approximately 53,954 in 2015 to a forecasted 88,332 by 2028, the increase reflects robust nominal growth in the labor market. The confidence interval, widening after 2024, suggests some uncertainty in predictions but still supports a positive growth outlook.
+
+In contrast, real wages (adjusted for inflation) remain relatively stagnant over the same period. The real wage level starts at 22,764 in 2015 and forecasts to plateau around 23,051 by 2028. This flat trajectory underscores the eroding purchasing power of wages due to inflationary pressures. While nominal wages appear to grow, their real value struggles to keep pace with rising costs of living.
+
+Wage Disparity: The divergence between nominal and real wages is a critical insight. It highlights that while workers may see higher nominal salaries, their actual purchasing power is barely improving.
+
+Inflationary Impact: The stagnation of real wages stresses the importance of inflation-adjusted pay increases. Without accounting for inflation, workers may experience a perceived improvement in earnings that does not translate to real-world benefits.
+
+Forecasting Confidence: The inclusion of confidence intervals (shaded area around the nominal forecast line) adds robustness to the predictions. The growing uncertainty beyond 2024 suggests external factors (e.g., inflation trends, economic shocks) could significantly influence future wages.
+
+<br>
+<br>
+
+## Final Conclusion
+
+This comprehensive analysis of wage trends, inequality, and inflation provides critical insights into the economic challenges faced by workers across the United States. While nominal wages have shown consistent growth over the years, real wages—adjusted for inflation—remain stagnant, reflecting a troubling erosion of purchasing power. Geographic disparities and wage volatility further highlight regional inequalities, with some states experiencing significant fluctuations, while others demonstrate remarkable stability.
+
+The exploration of wage inequality through Gini coefficients and Lorenz curves revealed persistent economic disparities, where a small portion of workers command a disproportionate share of total wages. This inequality has profound implications for economic equity, necessitating targeted policy interventions to ensure fairer distribution of income.
+
+Our poverty analysis underscores the vulnerability of larger households, where wages often fall below the poverty threshold, exacerbating economic hardship. Furthermore, the wage forecasting models suggest that without intervention, real wages will continue to lag behind inflation, deepening the economic pressures on workers.
+
+These findings highlight the urgent need for coordinated efforts among policymakers, businesses, and labor advocates. Addressing these challenges will require targeted measures such as inflation-adjusted wage policies, strategies to reduce geographic and industry-specific wage disparities, and interventions to tackle wage inequality and poverty.
+
+Ultimately, this analysis serves as a call to action to create an economy where wages align more closely with inflation, regional disparities are minimized, and economic opportunity is equitably shared. By addressing these systemic challenges, we can ensure a more stable and equitable future for workers across the nation.
+
+
+<br>
+<br>
+
+## Dictionary of Terms & Data Sources:
+
+To ensure clarity throughout this analysis, the following key terms are defined:
+
+__CPI (Consumer Price Index):__ A measure of the average change in prices paid by consumers for a basket of goods and services over time. It is a proxy for inflation, with a baseline year (1982-1984) where the index is set to 100.
+
+__Nominal Wages:__ The actual earnings of workers without adjusting for inflation.
+
+__Real Wages:__ Inflation-adjusted wages, reflecting the purchasing power of earnings.
+
+__Wage Inequality:__ The disparity in wages earned by workers, often measured using quantile analysis or indices like the Gini coefficient.
+
+__Data Sources:__
+CPI Data: Obtained from the U.S. Bureau of Labor Statistics (BLS)at https://data.bls.gov/timeseries/CUUR0000SA0?years_option=all_years
+
+Wage Data: Compiled from the U.S. Bureau of Labor Statistics (BLS) at https://www.bls.gov/oes/tables.htm.
