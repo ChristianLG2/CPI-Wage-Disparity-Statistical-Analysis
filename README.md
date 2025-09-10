@@ -1,7 +1,10 @@
 # CPI-Wage-Disparity-Statistical-Analysis
 
 ## 🌐 View the Full Analysis
-➡️ **[View the Full Report Here](https://christianlg2.github.io/CPI-Wage-Disparity-Statistical-Analysis/cpi_wage_trend_analysis.html)**  
+
+**[Reasearch Paper](https://drive.google.com/file/d/18HR4KMFGG_lo_uHUVQUe4kU1ecduZy76/view?usp=sharing)** 
+
+**[View Full RMD Report](https://christianlg2.github.io/CPI-Wage-Disparity-Statistical-Analysis/cpi_wage_trend_analysis.html)**  
 
 Or, clone the repository and open the `.Rproj` in RStudio to reproduce the analysis locally.
 
