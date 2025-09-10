@@ -77,7 +77,6 @@ Below are selected key visualizations from the analysis:
 |-------------|-------------|
 | `docs/cpi_wage_trend_analysis.html` | Rendered HTML report with interactive analysis and visualizations |
 | `CPI-Wage-Disparity-Statistical-Analysis.Rproj` | RStudio project file for reproducible analysis |
-| `scripts/` | (Optional) Contains R scripts for data preparation, cleaning, and modeling |
 | `data/` | (Optional) Raw and processed datasets (may be `.gitignored` if too large) |
 | `README.md` | This documentation |
 
