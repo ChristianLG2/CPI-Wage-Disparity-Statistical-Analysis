@@ -3,6 +3,8 @@
 ## 🌐 View the Full Analysis
 ➡️ **[View the Full Report Here](https://christianlg2.github.io/CPI-Wage-Disparity-Statistical-Analysis/cpi_wage_trend_analysis.html)**  
 
+Or, clone the repository and open the `.Rproj` in RStudio to reproduce the analysis locally.
+
 ## 📌 Introduction
 In an era of economic challenges, where inflation and wage growth compete for dominance in shaping financial stability, understanding their interplay has become crucial. Inflation, often measured by the **Consumer Price Index (CPI)**, reflects the rising cost of goods and services over time, eroding the purchasing power of households. Wages, serving as the primary source of income for most individuals, are central to determining the ability to navigate these inflationary pressures. Together, these factors form the cornerstone of economic equity and sustainability.
 
@@ -78,14 +80,6 @@ Below are selected key visualizations from the analysis:
 | `scripts/` | (Optional) Contains R scripts for data preparation, cleaning, and modeling |
 | `data/` | (Optional) Raw and processed datasets (may be `.gitignored` if too large) |
 | `README.md` | This documentation |
-
-
-## 🚀 How to View the Analysis
-
-You can view the live HTML report via **GitHub Pages**:  
-➡️ **[View Analysis Online](https://christianlg2.github.io/CPI-Wage-Disparity-Statistical-Analysis/cpi_wage_trend_analysis.html)**  
-
-Or, clone the repository and open the `.Rproj` in RStudio to reproduce the analysis locally.
 
 
 ## 📊 Key Insights (to be summarized)
