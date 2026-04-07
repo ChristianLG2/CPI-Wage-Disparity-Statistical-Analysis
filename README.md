@@ -86,9 +86,16 @@ Below are selected key visualizations from the analysis:
 
 ## 📊 Key Insights (to be summarized)
 
-- Summary of CPI vs. wage trends (add when ready).
-- Key statistical test results.
-- Forecasting highlights.
+- Real wages failed to keep pace with CPI across the majority of U.S. states 
+  during 2015–2023, indicating persistent erosion of purchasing power for 
+  most workers despite nominal wage growth.
+- No statistically significant correlation found between minimum wage increases 
+  and unemployment rates across target populations (youth, low-income, 
+  lower-education workers), challenging commonly cited economic assumptions 
+  and reinforcing the need for localized causal analysis.
+- Significant geographic wage disparities identified across states; ARIMA 
+  forecasting confirmed wage growth trajectories remain below inflation within 
+  confidence intervals, suggesting continued real wage erosion through 2025.
 
 
 ## 📜 License
