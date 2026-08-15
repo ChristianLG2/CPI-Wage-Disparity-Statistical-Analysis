@@ -83,17 +83,21 @@ CPI-Wage-Disparity-Statistical-Analysis/
  
 ![sf](https://img.shields.io/badge/sf-0f9d58?style=flat-square) ![tigris](https://img.shields.io/badge/tigris-0f9d58?style=flat-square) ![leaflet](https://img.shields.io/badge/leaflet-0f9d58?style=flat-square&logo=leaflet&logoColor=white)
 
+**Interactive App**
+
+![shiny](https://img.shields.io/badge/shiny-0b8a8f?style=flat-square&logo=r&logoColor=white)
+
 ## Reproducing the analysis
 
-Clone the repository and open `CPI-Wage-Disparity-Statistical-Analysis.Rproj` in RStudio, then knit `docs/cpi_wage_trend_analysis.Rmd`.
+Clone the repository and open `CPI-Wage-Disparity-Statistical-Analysis.Rproj` in RStudio.
+
+> **Note:** the raw CPI/wage files aren't committed to the repo (excluded via `.gitignore`). The `.Rmd` loads them via relative filenames (e.g. `all_data_M_2015.xlsx`, `Consumer_Price_Index_data.csv`), so to reproduce locally, source the CPI (`CUUR0000SA0`) and OES wage data from the links below and place the files in the same directory as `cpi_wage_trend_analysis.Rmd` before knitting.
 
 ## Dataset
 
 - **CPI:** BLS series [`CUUR0000SA0`](https://data.bls.gov/timeseries/CUUR0000SA0?years_option=all_years) — CPI for All Urban Consumers (CPI-U), U.S. city average, all items.
 - **Wages:** BLS [Occupational Employment and Wage Statistics (OES)](https://www.bls.gov/oes/tables.htm), annual files, 2015–2023, at the state level.
-- Raw data files are not committed to the repo (excluded via `.gitignore`). See the note under **Reproducing the analysis** below before expecting a clone-and-knit to work out of the box.
-- 
+
 ## License
 
 This project is open for educational and research purposes. You may fork and adapt it with proper attribution.
-
