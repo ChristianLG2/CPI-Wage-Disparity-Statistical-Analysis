@@ -1,108 +1,97 @@
-# CPI-Wage-Disparity-Statistical-Analysis
+# CPI & Wage Disparity Statistical Analysis
 
-## 🌐 View the Full Analysis
+Statistical analysis of the relationship between inflation (CPI) and wage growth in the U.S., using ANOVA, regression, quantile/Gini inequality analysis, and ARIMA forecasting on BLS data.
 
-**[Reasearch Paper](https://drive.google.com/file/d/18HR4KMFGG_lo_uHUVQUe4kU1ecduZy76/view?usp=sharing)** 
+**[View the rendered report](https://christianlg2.github.io/CPI-Wage-Disparity-Statistical-Analysis/cpi_wage_trend_analysis.html)** · **[Research paper](https://drive.google.com/file/d/18HR4KMFGG_lo_uHUVQUe4kU1ecduZy76/view?usp=sharing)**
 
-**[View Full RMD Report](https://christianlg2.github.io/CPI-Wage-Disparity-Statistical-Analysis/cpi_wage_trend_analysis.html)**  
+## Why this project
 
-Or, clone the repository and open the `.Rproj` in RStudio to reproduce the analysis locally.
-
-## 📌 Introduction
-In an era of economic challenges, where inflation and wage growth compete for dominance in shaping financial stability, understanding their interplay has become crucial. Inflation, often measured by the **Consumer Price Index (CPI)**, reflects the rising cost of goods and services over time, eroding the purchasing power of households. Wages, serving as the primary source of income for most individuals, are central to determining the ability to navigate these inflationary pressures. Together, these factors form the cornerstone of economic equity and sustainability.
-
-While wages have shown growth in various sectors, persistent questions remain:  
-- Are real wages (adjusted for inflation) truly keeping pace with rising costs, or are workers experiencing a quiet erosion of their purchasing power?  
-- Which regions or states demonstrate resilience, and which are more vulnerable?  
-- What patterns emerge when wage fluctuations are analyzed over time and across sectors?  
-- How has economic inequality evolved, and what lessons can be drawn for wage forecasting?
-
-This analysis addresses these questions by applying a robust framework of **statistical methods** and **visualizations** to evaluate wage dynamics over time.
+Nominal wage growth headlines can obscure whether workers are actually better off. This project asks the more useful question: are *real* (inflation-adjusted) wages keeping pace with CPI, and does that answer change depending on state, sector, or household size? The analysis treats this as a hypothesis-testing problem rather than a narrative one, each research question below is paired with a formal null/alternative hypothesis and tested with a method suited to that question.
 
 
-## 🎯 Objectives
-The goal of this analysis is to provide a comprehensive understanding of the relationship between wages and inflation, using CPI as the primary measure of inflation.
+## Research questions & methodology
 
-Specifically, this analysis aims to:
+| Question | Method | Why this method |
+|---|---|---|
+| Are real wages keeping up with inflation? | Paired comparison of nominal vs. real wage trends | Directly tests divergence between two adjusted series over time |
+| Do wage fluctuations differ across states? | ANOVA | Standard test for a difference in means across more than two groups |
+| Has wage inequality changed over time? | Gini coefficient + Lorenz curve | Purpose-built measures for income/wage distribution and inequality |
+| Are larger households more likely to fall below the poverty line? | Chi-square / association test | Tests independence between a categorical grouping and an outcome |
+| Are wage changes consistent year-over-year? | Time series decomposition | Separates trend from year-over-year variability |
+| Can wages be forecasted? | ARIMA | Standard model for forecasting a single time series with autocorrelation |
+| Are there significant geographic disparities? | Regression + ANOVA | Quantifies effect size and tests significance across states |
 
-- **Understand Trends in CPI** – Analyze yearly and monthly CPI trends to identify patterns of inflation.
-- **Examine Wage Trends** – Compare the evolution of nominal and real wages to assess whether purchasing power has kept up with inflation.
-- **Evaluate Geographic Wage Disparities** – Investigate how wage growth differs across states and regions.
-- **Assess Wage Inequality** – Measure trends in wage inequality using quantile analysis and the Gini index.
-- **Correlate Wages and Inflation** – Examine the relationship between wage growth and inflation to uncover systemic trends.
-- **Forecast Future Trends** – Project wage growth into the future to provide actionable insights.
+*(Note: this analysis was built following established statistical methodology for each question type, not from a comparison of alternative methods, so this section documents method-to-question fit rather than a decision trail.)*
 
-
-## ❓ Key Questions & Hypotheses
-
-| **Research Question** | **Null Hypothesis (H₀)** | **Alternative Hypothesis (Hₐ)** |
-|----------------------|-------------------------|--------------------------------|
-| Are real wages keeping up with inflation? | No significant difference between nominal and real wages. | Significant difference between nominal and real wages. |
-| Are some states more stable than others? | No significant difference in wage fluctuations across states. | Significant differences in wage fluctuations across states. |
-| Has wage inequality evolved over time? | No significant change in the Gini coefficient over time. | Gini coefficient has significantly changed over time. |
-| Are larger households more likely to fall below poverty line? | Poverty likelihood is independent of household size. | Larger households are more likely to fall below poverty line. |
-| Are wage changes consistent year-over-year? | Year-over-year wage changes remain consistent. | Wage changes show significant variability over time. |
-| Can wages be forecasted accurately? | ARIMA models do not provide accurate predictions. | ARIMA models provide accurate predictions within confidence intervals. |
-| Do real and nominal wages follow different trends? | Real and nominal wages follow the same trend. | Real and nominal wages follow significantly different trajectories. |
-| Are there significant geographic disparities? | Average wages do not vary significantly across states. | Average wages vary significantly across states. |
-| Do real wages keep households above poverty thresholds? | Real wages are sufficient to keep workers above poverty. | Real wages are insufficient, especially for larger households. |
-
-
-## 🧮 Statistical Methods
-
-This project uses a range of statistical techniques:
-
-- **Descriptive Statistics** – Means, medians, and ranges for CPI and wages.
-- **ANOVA** – To test for significant differences across months, years, and regions.
-- **Correlation Analysis** – To measure strength and direction of CPI–wage relationship.
-- **Regression Analysis** – To quantify wage growth versus inflation.
-- **Quantile Analysis** – To assess wage distribution and inequality.
-- **Gini Index** – To measure income/wage inequality.
-- **Time Series Analysis (ARIMA)** – To forecast future wage growth.
-- **Data Visualization** – Line charts, scatter plots, box plots, and animations for communication of results.
-
-
-## 🖼️ Demo Charts
-Below are selected key visualizations from the analysis:
-
-| Nominal vs Real Wages | Wage Growth Rate |
-|----------------------|-----------------|
-| ![Nominal vs Real](assets/NominalVRealWage.png) | ![Growth Rate](assets/GrowthRate.png) |
-
+## Key findings
+ 
+**Real wages failed to keep pace with CPI** across the majority of U.S. states during 2015–2023, indicating persistent erosion of purchasing power for most workers despite nominal wage growth.
+ 
+| Nominal vs. Real Wages | Wage Growth Rate |
+|---|---|
+| <img src="assets/NominalVRealWage.png" width="480"/> | <img src="assets/GrowthRate.png" width="480"/> |
+ 
+**No statistically significant correlation was found between minimum wage increases and unemployment rates** across target populations (youth, low-income, lower-education workers), challenging commonly cited assumptions.
+ 
+**Significant geographic wage disparities were identified across states**; ARIMA forecasting confirmed wage growth trajectories remain below inflation within confidence intervals, suggesting continued real wage erosion through 2025.
+ 
 | Lorenz Curve (Inequality) | Wage Forecast |
-|--------------------------|--------------|
-| ![Lorenz Curve](assets/LorenzCurve.png) | ![Forecast](assets/WageForecast.png) |
+|---|---|
+| <img src="assets/LorenzCurve.png" width="480"/> | <img src="assets/WageForecast.png" width="480"/> |
 
 
-## 🗂️ Project Structure
 
-| File/Folder | Description |
-|-------------|-------------|
-| `docs/cpi_wage_trend_analysis.html` | Rendered HTML report with interactive analysis and visualizations |
-| `CPI-Wage-Disparity-Statistical-Analysis.Rproj` | RStudio project file for reproducible analysis |
-| `data/` | (Optional) Raw and processed datasets (may be `.gitignored` if too large) |
-| `README.md` | This documentation |
+## Repository structure
 
+```
+CPI-Wage-Disparity-Statistical-Analysis/
+├── docs/
+│   ├── index.html                    # redirect stub for Pages
+│   └── cpi_wage_trend_analysis.html  # rendered report
+├── cpi_wage_trend_analysis.Rmd       # source, currently at root
+├── assets/
+├── CPI-Wage-Disparity-Statistical-Analysis.Rproj
+├── .gitattributes
+├── .gitignore
+└── README.md
+```
 
-## 📊 Key Insights (to be summarized)
+## Documentation
 
-- Real wages failed to keep pace with CPI across the majority of U.S. states 
-  during 2015–2023, indicating persistent erosion of purchasing power for 
-  most workers despite nominal wage growth.
-- No statistically significant correlation found between minimum wage increases 
-  and unemployment rates across target populations (youth, low-income, 
-  lower-education workers), challenging commonly cited economic assumptions 
-  and reinforcing the need for localized causal analysis.
-- Significant geographic wage disparities identified across states; ARIMA 
-  forecasting confirmed wage growth trajectories remain below inflation within 
-  confidence intervals, suggesting continued real wage erosion through 2025.
+- `docs/cpi_wage_trend_analysis.Rmd`, the full analysis: data prep, all statistical tests, and visualizations, in one reproducible R Markdown file.
+- `docs/cpi_wage_trend_analysis.html` the rendered version, also published via GitHub Pages (`docs/index.html`).
 
+## Tech stack
+ 
+**Core / Wrangling**
+ 
+![tidyverse](https://img.shields.io/badge/tidyverse-1a162d?style=flat-square&logo=tidyverse&logoColor=white)
+ 
+**Statistics**
+ 
+![car](https://img.shields.io/badge/car-6f42c1?style=flat-square)
+ 
+**Time Series / Forecasting**
+ 
+![tsibble](https://img.shields.io/badge/tsibble-e8590c?style=flat-square) ![fable](https://img.shields.io/badge/fable-e8590c?style=flat-square)
+ 
+**Visualization**
+ 
+![ggplot2](https://img.shields.io/badge/ggplot2-2c8ebb?style=flat-square&logo=r&logoColor=white) ![plotly](https://img.shields.io/badge/plotly-2c8ebb?style=flat-square&logo=plotly&logoColor=white) ![ggrepel](https://img.shields.io/badge/ggrepel-2c8ebb?style=flat-square) ![DT](https://img.shields.io/badge/DT-2c8ebb?style=flat-square) ![scales](https://img.shields.io/badge/scales-2c8ebb?style=flat-square)
+ 
+**Geographic / Mapping**
+ 
+![sf](https://img.shields.io/badge/sf-0f9d58?style=flat-square) ![tigris](https://img.shields.io/badge/tigris-0f9d58?style=flat-square) ![leaflet](https://img.shields.io/badge/leaflet-0f9d58?style=flat-square&logo=leaflet&logoColor=white)
 
-## 📜 License
+## Reproducing the analysis
+
+Clone the repository and open `CPI-Wage-Disparity-Statistical-Analysis.Rproj` in RStudio, then knit `docs/cpi_wage_trend_analysis.Rmd`.
+
+## Dataset
+
+U.S. Bureau of Labor Statistics (BLS). <!-- TODO: add the specific series names/citation once confirmed -->
+
+## License
+
 This project is open for educational and research purposes. You may fork and adapt it with proper attribution.
 
-
-## ✨ Author
-**Christian Lira Gonzalez**  
-Business Analytics | Data Science Enthusiast  
-[LinkedIn](https://www.linkedin.com/in/christianlg/) | [Portfolio](https://www.clirago.com)
