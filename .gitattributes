@@ -3,3 +3,4 @@
 
 # Rendered HTML is generated from the .Rmd, not hand-written
 docs/**/*.html linguist-generated=true
+*.html linguist-generated=true
