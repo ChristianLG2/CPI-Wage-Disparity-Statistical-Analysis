@@ -58,7 +58,7 @@ CPI-Wage-Disparity-Statistical-Analysis/
 
 ## Documentation
 
-- `docs/cpi_wage_trend_analysis.Rmd`, the full analysis: data prep, all statistical tests, and visualizations, in one reproducible R Markdown file.
+- `cpi_wage_trend_analysis.Rmd`, the full analysis: data prep, all statistical tests, and visualizations, in one reproducible R Markdown file.
 - `docs/cpi_wage_trend_analysis.html` the rendered version, also published via GitHub Pages (`docs/index.html`).
 
 ## Tech stack
@@ -89,8 +89,10 @@ Clone the repository and open `CPI-Wage-Disparity-Statistical-Analysis.Rproj` in
 
 ## Dataset
 
-U.S. Bureau of Labor Statistics (BLS). <!-- TODO: add the specific series names/citation once confirmed -->
-
+- **CPI:** BLS series [`CUUR0000SA0`](https://data.bls.gov/timeseries/CUUR0000SA0?years_option=all_years) — CPI for All Urban Consumers (CPI-U), U.S. city average, all items.
+- **Wages:** BLS [Occupational Employment and Wage Statistics (OES)](https://www.bls.gov/oes/tables.htm), annual files, 2015–2023, at the state level.
+- Raw data files are not committed to the repo (excluded via `.gitignore`). See the note under **Reproducing the analysis** below before expecting a clone-and-knit to work out of the box.
+- 
 ## License
 
 This project is open for educational and research purposes. You may fork and adapt it with proper attribution.
