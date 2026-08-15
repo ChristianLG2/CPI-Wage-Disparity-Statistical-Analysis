@@ -1,9 +1,5 @@
 # Count R Markdown as R
 *.Rmd linguist-language=R
 
-# Don’t let rendered HTML dominate language stats
-# (treat them as vendored/generated assets)
-reports/**/*.html linguist-vendored
-docs/**/*.html linguist-vendored
-archive/**/*.html linguist-vendored
-*.html linguist-vendored
+# Rendered HTML is generated from the .Rmd, not hand-written
+docs/**/*.html linguist-generated=true
