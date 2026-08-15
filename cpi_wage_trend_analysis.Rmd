@@ -255,7 +255,7 @@ library(forcats)
 All15 <- readxl::read_excel("all_data_M_2015.xlsx")
 
 # 2016 Occupational Employment and Wage Statistics
-All16 <-readxl::read_excel("\all_data_M_2016.xlsx")
+All16 <-readxl::read_excel("all_data_M_2016.xlsx")
 
 # 2017 Occupational Employment and Wage Statistics
 All17 <-readxl::read_excel("all_data_M_2017.xlsx")
