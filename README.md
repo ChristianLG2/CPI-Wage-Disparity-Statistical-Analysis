@@ -89,7 +89,7 @@ Clone the repository and open `CPI-Wage-Disparity-Statistical-Analysis.Rproj` in
 
 ## Dataset
 
-- **CPI:** BLS series [`CUUR0000SA0`](https://data.bls.gov/timeseries/CUUR0000SA0?years_option=all_years) — CPI for All Urban Consumers (CPI-U), U.S. city average, all items.
+- **CPI:** BLS series [`CUUR0000SA0`](https://data.bls.gov/timeseries/CUUR0000SA0?years_option=all_years) CPI for All Urban Consumers (CPI-U), U.S. city average, all items.
 - **Wages:** BLS [Occupational Employment and Wage Statistics (OES)](https://www.bls.gov/oes/tables.htm), annual files, 2015–2023, at the state level.
 
 ## License
