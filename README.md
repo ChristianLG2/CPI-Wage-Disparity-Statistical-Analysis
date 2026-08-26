@@ -64,28 +64,15 @@ CPI-Wage-Disparity-Statistical-Analysis/
 ## Tech stack
  
 **Core / Wrangling**
- 
+
+<p align="center">
 ![tidyverse](https://img.shields.io/badge/tidyverse-1a162d?style=flat-square&logo=tidyverse&logoColor=white)
- 
-**Statistics**
- 
 ![car](https://img.shields.io/badge/car-6f42c1?style=flat-square)
- 
-**Time Series / Forecasting**
- 
 ![tsibble](https://img.shields.io/badge/tsibble-e8590c?style=flat-square) ![fable](https://img.shields.io/badge/fable-e8590c?style=flat-square)
- 
-**Visualization**
- 
 ![ggplot2](https://img.shields.io/badge/ggplot2-2c8ebb?style=flat-square&logo=r&logoColor=white) ![plotly](https://img.shields.io/badge/plotly-2c8ebb?style=flat-square&logo=plotly&logoColor=white) ![ggrepel](https://img.shields.io/badge/ggrepel-2c8ebb?style=flat-square) ![DT](https://img.shields.io/badge/DT-2c8ebb?style=flat-square) ![scales](https://img.shields.io/badge/scales-2c8ebb?style=flat-square)
- 
-**Geographic / Mapping**
- 
 ![sf](https://img.shields.io/badge/sf-0f9d58?style=flat-square) ![tigris](https://img.shields.io/badge/tigris-0f9d58?style=flat-square) ![leaflet](https://img.shields.io/badge/leaflet-0f9d58?style=flat-square&logo=leaflet&logoColor=white)
-
-**Interactive App**
-
 ![shiny](https://img.shields.io/badge/shiny-0b8a8f?style=flat-square&logo=r&logoColor=white)
+</p>
 
 ## Reproducing the analysis
 
